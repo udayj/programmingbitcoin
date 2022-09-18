@@ -293,7 +293,14 @@ class ECCTest(TestCase):
         # initialize x's and y's as FieldElements
         # create p1, p2 and p3 as Points
         # check p1+p2==p3
-        raise NotImplementedError
+        
+        for points in additions:
+            field_elements = [FieldElement(i,prime) for i in points]
+            p1 = Point(field_elements[0],field_elements[1],a,b)
+            p2 = Point(field_elements[2],field_elements[3],a,b)
+            p3 = Point(field_elements[4],field_elements[5],a,b)
+            assert p1+p2==p3
+        
 
     def test_rmul(self):
         # tests the following scalar multiplications
