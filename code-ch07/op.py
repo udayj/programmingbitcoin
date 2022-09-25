@@ -16,6 +16,7 @@ from helper import (
 
 LOGGER = getLogger(__name__)
 
+# some elemtns on the stack are interpeted as integers while some as byte string, under the hood all elements are bytes
 
 def encode_num(num):
     if num == 0:
