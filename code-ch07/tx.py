@@ -160,6 +160,17 @@ class Tx:
     def sig_hash(self, input_index):
         '''Returns the integer representation of the hash that needs to get
         signed for index input_index'''
+        input_tx = self.tx_ins[input_index]
+        prev_script_pubkey = input_tx.fetch_tx().tx_outs[input_tx.prev_index].script_pubkey
+        new_inputs = []
+        for tx in self.tx_ins:
+            new_inputs.append(TxIn(tx.prev_tx, tx.prev_index, None, tx.sequence))
+        new_inputs[input_index].script_sig = prev_script_pubkey
+        serialized_tx = Tx(self.version, new_inputs, self.tx_outs, self.locktime, self.testnet).serialize()
+        serialized_tx += int_to_little_endian(1,4)
+        z = int.from_bytes(hash256(serialized_tx), 'big')
+        return z
+            
         # start the serialization with version
         # use int_to_little_endian in 4 bytes
         # add how many inputs there are using encode_varint
@@ -174,7 +185,7 @@ class Tx:
         # add SIGHASH_ALL using int_to_little_endian in 4 bytes
         # hash256 the serialization
         # convert the result to an integer using int.from_bytes(x, 'big')
-        raise NotImplementedError
+        
 
     def verify_input(self, input_index):
         '''Returns whether the input has a valid signature'''
