@@ -194,7 +194,11 @@ class Tx:
         # get the signature hash (z)
         # combine the current ScriptSig and the previous ScriptPubKey
         # evaluate the combined script
-        raise NotImplementedError
+        input_tx = self.tx_ins[input_index]
+        prev_script_pubkey = input_tx.fetch_tx().tx_outs[input_tx.prev_index].script_pubkey
+        z = self.sig_hash(input_index)
+        combined_script = input_tx.script_sig + prev_script_pubkey
+        return combined_script.evaluate(z)
 
     # tag::source2[]
     def verify(self):
