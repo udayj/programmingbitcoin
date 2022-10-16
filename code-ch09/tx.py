@@ -261,6 +261,11 @@ class Tx:
         # grab the first input
         # check that first input prev_tx is b'\x00' * 32 bytes
         # check that first input prev_index is 0xffffffff
+        
+        cond_1=len(self.tx_ins)==1
+        cond_2=self.tx_ins[0].prev_tx==b'\x00'*32
+        cond_3=self.tx_ins[0].prev_index==0xffffffff
+        return cond_1 and cond_2 and cond_3
         raise NotImplementedError
 
     def coinbase_height(self):
