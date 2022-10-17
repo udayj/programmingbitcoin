@@ -266,7 +266,7 @@ class Tx:
         cond_2=self.tx_ins[0].prev_tx==b'\x00'*32
         cond_3=self.tx_ins[0].prev_index==0xffffffff
         return cond_1 and cond_2 and cond_3
-        raise NotImplementedError
+        
 
     def coinbase_height(self):
         '''Returns the height of the block this coinbase transaction is in
@@ -275,7 +275,12 @@ class Tx:
         # if this is NOT a coinbase transaction, return None
         # grab the first cmd
         # convert the cmd from little endian to int
-        raise NotImplementedError
+        if not self.is_coinbase():
+            return None
+        s=self.tx_ins[0].script_sig.cmds[0]
+        s=little_endian_to_int(s)
+        return s
+        
 
 
 class TxIn:
