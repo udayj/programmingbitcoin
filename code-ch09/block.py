@@ -32,7 +32,14 @@ class Block:
         # bits - 4 bytes
         # nonce - 4 bytes
         # initialize class
-        raise NotImplementedError
+        version = little_endian_to_int(s.read(4))
+        prev_block = s.read(32)[::-1]
+        merkle_root = s.read(32)[::-1]
+        timestamp = little_endian_to_int(s.read(4))
+        bits=s.read(4)
+        nonce = s.read(4)
+        return cls(version, prev_block, merkle_root, timestamp, bits, nonce)
+        
 
     def serialize(self):
         '''Returns the 80 byte block header'''
