@@ -50,6 +50,15 @@ class NetworkEnvelope:
             expected_magic = NETWORK_MAGIC
         if magic != expected_magic:
             raise RuntimeError('magic is not right {} vs {}'.format(magic.hex(), expected_magic.hex()))
+        command = s.read(12)
+        command = command.strip(b'\x00')
+        payload_len = s.read(4)
+        payload_checksum = s.read(4)
+        payload=s.read(little_endian_to_int(payload_len))
+        if hash256(payload)[:4]!=payload_checksum:
+            print("problem")
+            return None
+        return cls(command, payload, testnet)
         # command 12 bytes
         # strip the trailing 0's
         # payload length 4 bytes, little endian
