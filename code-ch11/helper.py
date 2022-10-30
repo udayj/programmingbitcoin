@@ -193,7 +193,14 @@ def merkle_parent_level(hashes):
         # get the merkle parent of the hashes at index i and i+1
         # append parent to parent level
     # return parent level
-    raise NotImplementedError
+    
+    if len(hashes)%2!=0:
+        hashes.append(hashes[-1])
+    parent_level_hashes=[]
+    for i in range(0,len(hashes),2):
+        parent_level_hashes.append(merkle_parent(hashes[i],hashes[i+1]))
+    return parent_level_hashes
+    
 
 
 def merkle_root(hashes):
@@ -203,7 +210,9 @@ def merkle_root(hashes):
     # loop until there's exactly 1 element
         # current level becomes the merkle parent level
     # return the 1st item of the current level
-    raise NotImplementedError
+    
+   
+    
 
 
 def bit_field_to_bytes(bit_field):
