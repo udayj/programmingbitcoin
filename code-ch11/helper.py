@@ -211,7 +211,10 @@ def merkle_root(hashes):
         # current level becomes the merkle parent level
     # return the 1st item of the current level
     
-   
+    current_hashes=hashes
+    while len(current_hashes) > 1:
+        current_hashes=merkle_parent_level(current_hashes)
+    return current_hashes[0]
     
 
 
